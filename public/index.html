@@ -293,9 +293,9 @@
     }
 
     .size-btn.out-of-stock {
-      border-color: var(--text-muted);
-      color: var(--text-muted);
-      opacity: 0.5;
+      border-color: var(--danger);
+      color: var(--danger);
+      opacity: 0.8;
     }
 
     .size-btn.selected {
@@ -304,8 +304,9 @@
       color: white;
     }
 
-    .size-btn:hover:not(.out-of-stock) {
+    .size-btn:hover {
       background: var(--bg-hover);
+      cursor: pointer;
     }
 
     .products-list {
@@ -545,7 +546,8 @@
         <div class="divider"></div>
         
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
-          Sélectionnez les tailles à surveiller (vide = toutes) :
+          Sélectionnez les tailles à surveiller (vide = toutes) :<br>
+          <span style="color: var(--success);">✓ En stock</span> · <span style="color: var(--danger);">✗ Rupture (à surveiller!)</span>
         </div>
         
         <div class="sizes-grid" id="sizesGrid"></div>
@@ -664,12 +666,11 @@
         for (const [sizeName, sizeInfo] of Object.entries(product.sizes)) {
           const btn = document.createElement('button');
           btn.className = `size-btn ${sizeInfo.inStock ? 'in-stock' : 'out-of-stock'}`;
-          btn.textContent = sizeName;
+          btn.textContent = `${sizeName} ${sizeInfo.inStock ? '✓' : '✗'}`;
           btn.dataset.size = sizeName;
           
-          if (sizeInfo.inStock) {
-            btn.onclick = () => toggleSize(sizeName, btn);
-          }
+          // Allow clicking ALL sizes (especially out-of-stock ones to monitor!)
+          btn.onclick = () => toggleSize(sizeName, btn);
           
           sizesGrid.appendChild(btn);
         }
